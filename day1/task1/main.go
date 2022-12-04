@@ -1,21 +1,44 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	stringData := loadData("data.txt")
-	result := 0
+//go:embed input.txt
+var input string
 
-	for _, v := range stringData {
-		eachV := strings.Split(string(v), "\n")
+func main() {
+
+	strData := strings.Split(input, "\n\n")
+
+	for _, set := range strData {
+		foobar := strings.Split(string(set), "\n")
+		//fmt.Println(string(set))
+		for _, row := range foobar {
+			fmt.Println(row)
+			fmt.Println("(((((((((())))))))")
+		}
+	}
+}
+
+func foobar() []int {
+
+	var arrData []int
+
+	return arrData
+}
+
+func taskOne(data []string) int {
+	var result int
+
+	for _, values := range data {
+		val := strings.Split(string(values), "\n")
 		sum := 0
-		for _, v := range eachV {
+		for _, v := range val {
 
 			if v != "" {
 				value, err := strconv.Atoi(v)
@@ -31,16 +54,5 @@ func main() {
 		}
 
 	}
-	fmt.Println(result)
-}
-
-func loadData(fileName string) []string {
-	// read the file
-	file, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		os.Exit(1)
-	}
-
-	// slice of lines from the content of data.txt
-	return strings.Split(string(file), "\n\n")
+	return result
 }

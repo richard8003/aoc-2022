@@ -14,7 +14,7 @@ func main() {
 	rows := []int{}
 
 	for _, v := range stringData {
-		eachV := strings.Split(string(v), "\n")
+Öq		eachV := strings.Split(string(v), "\n")
 		sum := 0
 		for _, v := range eachV {
 

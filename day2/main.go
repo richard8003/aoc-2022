@@ -6,73 +6,125 @@ import (
 	"strings"
 )
 
-//go:embed input.txt
-var input string
+//go:embed ex.txt
+var ex string
 
 /*
 A  | rock     1p | Y  paper  2p      win 6p
 B  | paper    2p | X  rock  1p       loss 0p
 C  | scissors 3p | Z  scissors 3p    draw 3p
+
+Y draw
+X loose
+Z win
 */
-type tableOfScores [][]string
 
 func main() {
-	data := makeInputSlice()
-	sum := calcSumOfAllScores(data)
-	fmt.Println(sum)
+
+	fmt.Println(ex)
+
+	test2 := createList(ex)
+	fmt.Println(test2)
+	//fmt.Println(calcPointsOfList(test2))
+
 }
 
-func calcSumOfAllScores(t tableOfScores) int {
-	var sum int
-	for _, row := range t {
-		foo := row[1]
-		bar := row[0]
+//================================================================
 
-		switch {
-		case bar == "A":
-			switch {
-			case foo == "Y":
-				sum += 8
-			case foo == "X":
-				sum += 4
-			case foo == "Z":
-				sum += 3
-			}
-		case bar == "B":
-			switch {
-			case foo == "Y":
-				sum += 5
-			case foo == "X":
-				sum += 1
-			case foo == "Z":
-				sum += 9
-			}
+func calcPointsOfList(s string) int {
+	var total int
 
-		case bar == "C":
+	for _, i := range strings.Split(string(ex), "\n") {
+
+		if i != "" {
+
+			you := string(i[0])
+			me := string(i[2])
+
 			switch {
-			case foo == "Y":
-				sum += 2
-			case foo == "X":
-				sum += 7
-			case foo == "Z":
-				sum += 6
+			case you == "A":
+				switch {
+				case me == "Y":
+					total += 8
+				case me == "X":
+					total += 4
+				case me == "Z":
+					total += 3
+				}
+			case you == "B":
+				switch {
+				case me == "Y":
+					total += 5
+				case me == "X":
+					total += 1
+				case me == "Z":
+					total += 9
+				}
+
+			case you == "C":
+				switch {
+				case me == "Y":
+					total += 2
+				case me == "X":
+					total += 7
+				case me == "Z":
+					total += 6
+				}
 			}
 		}
 	}
 
-	return sum
+	return total
+
 }
 
-func makeInputSlice() tableOfScores {
-	var data tableOfScores
-	sliceData := strings.Split(string(input), "\n")
+func createList(list string) string {
+	var newList string
 
-	for _, v := range sliceData {
+	for _, v := range strings.Split(ex, "\n") {
+
 		if v != "" {
-			row := strings.Split(v, " ")
-			data = append(data, row)
+			one := string(v[0])
+			two := string(v[2])
+
+			var add string
+
+			if two == "Y" {
+				switch {
+				case one == "A":
+					add = "A X"
+				case one == "B":
+					add = "B Y"
+				case one == "C":
+					add = "C Z"
+				}
+			}
+			if two == "X" {
+				switch {
+				case one == "A":
+					add = "A Z"
+				case one == "B":
+					add = "B X"
+				case one == "C":
+					add = "C Y"
+				}
+			}
+			if two == "Z" {
+				switch {
+				case one == "A":
+					add = "A Y"
+				case one == "B":
+					add = "B Z"
+				case one == "C":
+					add = "C X"
+				}
+			}
+
+			fmt.Println(add)
+			newList += add
 		}
 	}
 
-	return data
+	return newList
+
 }

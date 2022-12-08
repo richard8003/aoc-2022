@@ -45,9 +45,12 @@ func compare(foobar string) bool {
 	bar0, _ := strconv.Atoi(bar[0])
 	bar1, _ := strconv.Atoi(bar[1])
 
-	if foo0 <= bar0 && bar1 <= foo1 {
+	//if foo0 <= bar0 && bar1 <= foo1 {
+	if foo0 <= bar0 && foo1 >= bar1 || bar0 <= foo0 && bar1 >= foo1 {
+		fmt.Println("true")
 		return true
 	} else {
+		fmt.Println("false")
 		return false
 	}
 

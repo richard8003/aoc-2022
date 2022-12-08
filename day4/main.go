@@ -31,6 +31,7 @@ func main() {
 			}
 		}
 	}
+
 	fmt.Println(sum)
 }
 
@@ -47,10 +48,8 @@ func compare(foobar string) bool {
 
 	//if foo0 <= bar0 && bar1 <= foo1 {
 	if foo0 <= bar0 && foo1 >= bar1 || bar0 <= foo0 && bar1 >= foo1 {
-		fmt.Println("true")
 		return true
 	} else {
-		fmt.Println("false")
 		return false
 	}
 

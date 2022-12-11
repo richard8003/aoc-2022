@@ -7,50 +7,81 @@ import (
 	"strings"
 )
 
-/*
-2-4,6-8
-2-3,4-5
-5-7,7-9
-2-8,3-7
-6-6,4-6
-2-6,4-8
-*/
-
 //go:embed input
 var input string
 
 func main() {
-	sum := 0
-	foo := strings.Split(input, "\n")
+	data := parseData()
 
-	for _, row := range foo {
-		if row != "" {
+	fmt.Println(partOne(data))
+	fmt.Println(two(data))
 
-			if compare(row) {
-				sum += 1
-			}
-		}
-	}
-
-	fmt.Println(sum)
 }
 
-func compare(foobar string) bool {
+func two(data [][][]int) int {
+	sum := 0
 
-	splitFoobar := strings.Split(foobar, ",")
-	foo := strings.Split(splitFoobar[0], "-")
-	bar := strings.Split(splitFoobar[1], "-")
+	for _, l := range data {
+		left := l[0]
+		right := l[1]
 
-	foo0, _ := strconv.Atoi(foo[0])
-	foo1, _ := strconv.Atoi(foo[1])
-	bar0, _ := strconv.Atoi(bar[0])
-	bar1, _ := strconv.Atoi(bar[1])
+		if left[0] <= right[1] && left[1] >= right[0] {
+			sum += 1
+		}
 
-	//if foo0 <= bar0 && bar1 <= foo1 {
-	if foo0 <= bar0 && foo1 >= bar1 || bar0 <= foo0 && bar1 >= foo1 {
-		return true
-	} else {
-		return false
+	}
+	return sum
+}
+
+func partOne(data [][][]int) int {
+	sum := 0
+
+	for _, l := range data {
+		left := l[0]
+		right := l[1]
+
+		if left[0] >= right[0] && left[1] <= right[1] || right[0] >= left[0] && right[1] <= left[1] {
+			sum += 1
+		}
+
+	}
+	return sum
+}
+
+func parseData() [][][]int {
+	raw := strings.TrimRight(input, "\n")
+	//raw = strings.TrimRight(input, "\n")
+	rows := strings.Split(raw, "\n")
+	var data [][][]int
+
+	for _, el := range rows {
+		temp := splitSliceOfRows(el)
+		data = append(data, temp)
+	}
+	return data
+}
+
+// used by parseData
+func splitSliceOfRows(s string) [][]int {
+	var row [][]int
+
+	cellStr := strings.Split(s, ",")
+	for _, c := range cellStr {
+		cell := createNumberSlice(c)
+		row = append(row, cell)
 	}
 
+	return row
+}
+
+// used by splitSliceOfRows > parseData
+func createNumberSlice(s string) []int {
+	var cell []int
+
+	for _, v := range strings.Split(s, "-") {
+		digit, _ := strconv.Atoi(string(v))
+		cell = append(cell, digit)
+	}
+
+	return cell
 }

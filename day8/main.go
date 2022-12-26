@@ -8,64 +8,84 @@ import (
 )
 
 func main() {
+	//trees := readFile("onerow")
 	trees := readFile("testInput")
 	var total int
 
-	for x, row := range trees {
+	for rowIndx, row := range trees {
 
 		rowMax := -1
 		sum := 0
 
-		for i, tree := range row {
-			if tree > rowMax {
+		for treeIndx, tree := range row {
+			// if the current row is the first or last row, automatically
+			// sum ++
+			if rowIndx == 0 {
+				sum++
+				fmt.Println(tree, "is visible from the top")
+				continue
+			}
+
+			// chech it the current tree is visible from the left
+			if visibleFromLeft(tree, rowMax) {
 				sum++
 				rowMax = setMax(tree, rowMax)
-				fmt.Println("visibles from the left")
+				fmt.Println(tree, "is visible from the left")
 				continue
-			} else if checkFromRight(tree, row[i+1:]) {
-				sum++
-				fmt.Println("visibles from the right")
-				continue
-			} else if checkTop(trees, tree, row, i, x) {
-				sum++
-				fmt.Println("visible from the top")
 			}
-		}
 
+			// chech it the current tree is visible from the right
+			if treeIndx == len(row)-1 || visibleFromRight(tree, row[treeIndx+1:]) {
+				sum++
+				fmt.Println(tree, "is visible from the right")
+				continue
+			}
+
+			if rowIndx == len(row)-1 {
+				sum++
+				fmt.Println(tree, "is visible from the bottom")
+				continue
+			} else {
+
+				slice := trees[:rowIndx]
+
+				for _, s := range slice {
+					if s[treeIndx] > tree {
+						fmt.Println(tree, "is blocked by", s[treeIndx])
+						break
+					}
+				}
+
+			}
+
+		}
+		fmt.Println("---------------------------")
 		total += sum
 	}
-	fmt.Println(total)
+	fmt.Println(total, "visuble trees in total")
 
 }
 
-func checkTop(trees [][]int, tree int, row []int, i int, x int) bool {
-	slice := trees[:x]
-
-	for _, t := range slice {
-
-		if tree > t[i] {
-			continue
-		} else {
-			return false
-		}
-
-	}
+func visibleFromTop() bool {
 
 	return true
 }
 
-func checkFromRight(pivot int, slice []int) bool {
-	for _, x := range slice {
-		if slice == nil {
-			return true
-
-		}
-		if x > pivot {
+func visibleFromRight(tree int, slice []int) bool {
+	//fmt.Println(slice)
+	for _, i := range slice {
+		if tree <= i {
 			return false
 		}
 	}
-
 	return true
+}
+
+func visibleFromLeft(tree, rowMax int) bool {
+	if tree > rowMax {
+		return true
+	}
+	return false
 }
 
 func setMax(a int, b int) int {

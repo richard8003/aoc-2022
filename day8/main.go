@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	trees := readFile("live")
+	trees := readFile("testInput")
 	var total int
 
 	for x, row := range trees {
@@ -18,26 +18,19 @@ func main() {
 		sum := 0
 
 		for i, tree := range row {
-			fmt.Println(row)
 			if tree > rowMax {
 				sum++
 				rowMax = setMax(tree, rowMax)
-				fmt.Println(tree, "is visibles from the left")
+				fmt.Println("visibles from the left")
 				continue
 			} else if checkFromRight(tree, row[i+1:]) {
 				sum++
-				fmt.Println(tree, "is visibles from the right")
+				fmt.Println("visibles from the right")
 				continue
 			} else if checkTop(trees, tree, row, i, x) {
 				sum++
-				fmt.Println(tree, "is visible from the top")
-				continue
-			} else if checkBottom(trees, tree, row, i, x) {
-				sum++
-				fmt.Println(tree, "is visible from the bottom")
-				continue
-			} else {
-				fmt.Println("tree is not visible")
+				fmt.Println("visible from the top")
+
 			}
 		}
 
@@ -49,21 +42,6 @@ func main() {
 
 func checkTop(trees [][]int, tree int, row []int, i int, x int) bool {
 	slice := trees[:x]
-	for _, t := range slice {
-
-		if tree > t[i] {
-			continue
-		} else {
-			return false
-		}
-
-	}
-
-	return true
-}
-
-func checkBottom(trees [][]int, tree int, row []int, i int, x int) bool {
-	slice := trees[x:]
 
 	for _, t := range slice {
 

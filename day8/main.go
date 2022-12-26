@@ -9,7 +9,7 @@ import (
 
 func main() {
 	//trees := readFile("onerow")
-	trees := readFile("testInput")
+	trees := readFile("input")
 	var total int
 
 	for rowIndx, row := range trees {

@@ -8,65 +8,95 @@ import (
 	"strings"
 )
 
-/*
-30373
-25512
-65332
-33549
-35390
-*/
-
 func main() {
-	//trees := readFile("test")
-	var trees [][]int
-	trees = append(trees, []int{1, 1, 1, 1, 1})
-	//trees = append(trees, []int{2, 5, 7, 1, 2})
-	trees = append(trees, []int{1, 2, 3, 2, 1})
-	trees = append(trees, []int{1, 1, 1, 1, 1})
+	trees := readFile("live")
+	var total int
 
-	//for i, row := range trees {
-	//// skip row 0 and the last row
-	//if i == 0 || i == len(trees)-1 {
-	//continue
-	//}
-	//// slice everything between the first and last elemet in the row
-	//slice := row[1 : len(row)-1]
-	//
-	//foobar(row, slice)
-	//}
-	row := trees[1]
-	slice := row[1 : len(row)-1]
+	for x, row := range trees {
 
-	foobar(row, slice)
-}
+		rowMax := -1
+		sum := 0
 
-func foobar(row []int, slice []int) {
-	for i := 1; i < len(slice)+1; i++ {
-		//fmt.Println(row[i])
-		before := row[:i]
-		after := row[i+1:]
-		current := row[i]
-
-		fmt.Println("Checking row:", row)
-		if checkSides(before, current) {
-			if checkSides(after, current) {
-				fmt.Println("All clear")
+		for i, tree := range row {
+			fmt.Println(row)
+			if tree > rowMax {
+				sum++
+				rowMax = setMax(tree, rowMax)
+				fmt.Println(tree, "is visibles from the left")
+				continue
+			} else if checkFromRight(tree, row[i+1:]) {
+				sum++
+				fmt.Println(tree, "is visibles from the right")
+				continue
+			} else if checkTop(trees, tree, row, i, x) {
+				sum++
+				fmt.Println(tree, "is visible from the top")
+				continue
+			} else if checkBottom(trees, tree, row, i, x) {
+				sum++
+				fmt.Println(tree, "is visible from the bottom")
+				continue
+			} else {
+				fmt.Println("tree is not visible")
 			}
 		}
-		fmt.Println("---------------------")
+
+		total += sum
 	}
+	fmt.Println(total)
+
 }
 
-func checkSides(slice []int, pivot int) bool {
-	fmt.Println("Checking if either elemet en", slice, "is greater than", pivot)
-	for _, s := range slice {
-		if s >= pivot {
-			fmt.Println(s, "is taller than", pivot)
+func checkTop(trees [][]int, tree int, row []int, i int, x int) bool {
+	slice := trees[:x]
+	for _, t := range slice {
+
+		if tree > t[i] {
+			continue
+		} else {
+			return false
+		}
+
+	}
+
+	return true
+}
+
+func checkBottom(trees [][]int, tree int, row []int, i int, x int) bool {
+	slice := trees[x:]
+
+	for _, t := range slice {
+
+		if tree > t[i] {
+			continue
+		} else {
+			return false
+		}
+
+	}
+
+	return true
+}
+
+func checkFromRight(pivot int, slice []int) bool {
+	for _, x := range slice {
+		if slice == nil {
+			return true
+
+		}
+		if x > pivot {
 			return false
 		}
 	}
-	fmt.Println("Pivot", pivot, "can bee seen")
+
 	return true
+}
+
+func setMax(a int, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func readFile(f string) [][]int {

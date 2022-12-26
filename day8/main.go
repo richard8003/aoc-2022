@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "embed"
 	"fmt"
 	"io/ioutil"
 	"strconv"
@@ -30,7 +29,6 @@ func main() {
 			} else if checkTop(trees, tree, row, i, x) {
 				sum++
 				fmt.Println("visible from the top")
-
 			}
 		}
 

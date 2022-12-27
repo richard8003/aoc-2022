@@ -8,12 +8,11 @@ import (
 )
 
 func main() {
-	//trees := readFile("onerow")
-	trees := readFile("input")
+	//trees := readFile("input")
+	trees := readFile("testInput")
 	var total int
 
 	for rowIndx, row := range trees {
-
 		rowMax := -1
 		sum := 0
 
@@ -45,17 +44,16 @@ func main() {
 				sum++
 				fmt.Println(tree, "is visible from the bottom")
 				continue
-			} else {
+			}
 
-				slice := trees[:rowIndx]
+			if visibleFromTop(trees, rowIndx, tree, treeIndx) {
+				sum++
+				continue
+			}
 
-				for _, s := range slice {
-					if s[treeIndx] > tree {
-						fmt.Println(tree, "is blocked by", s[treeIndx])
-						break
-					}
-				}
-
+			if visibleFromBottom(trees, rowIndx, tree, treeIndx) {
+				sum++
+				continue
 			}
 
 		}
@@ -66,7 +64,30 @@ func main() {
 
 }
 
-func visibleFromTop() bool {
+func visibleFromBottom(trees [][]int, rowIndx, tree, treeIndx int) bool {
+	bottom := trees[rowIndx:]
+
+	for _, t := range bottom {
+		if t[treeIndx] > tree {
+			fmt.Println(tree, "is blocked by", t[treeIndx], "from the bottom")
+
+			return false
+		}
+	}
+
+	return true
+}
+
+func visibleFromTop(trees [][]int, rowIndx, tree, treeIndx int) bool {
+	top := trees[:rowIndx]
+
+	for _, t := range top {
+		if t[treeIndx] > tree {
+			fmt.Println(tree, "is blocked by", t[treeIndx], "from the top")
+
+			return false
+		}
+	}
 
 	return true
 }
